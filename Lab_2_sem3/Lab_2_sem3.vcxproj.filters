@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Sequence">
+      <UniqueIdentifier>{337ef5c5-3f3f-4511-a13f-a90fd96fe810}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sequence\ArraySequence">
+      <UniqueIdentifier>{5ab19952-f052-4739-95fd-e5f22a563b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sequence\ListSequence">
+      <UniqueIdentifier>{ab213c5c-8b0d-40e4-8bf5-8cfb17190273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{4a193652-f46b-4ea1-8282-20afb12e1181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\UnitTest">
+      <UniqueIdentifier>{fc393a7a-0b6d-49ae-912c-083ab49f40af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\TimedTest">
+      <UniqueIdentifier>{916cb0c7-b1cf-4a9b-8c53-3e62fd6fb352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{ff5d4c53-82bf-4ff7-a399-b709d9bb9d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\TestEnvironment">
+      <UniqueIdentifier>{8a36963f-a425-4c3b-84ed-7fd6e9295cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ItemGenerator">
+      <UniqueIdentifier>{51631814-ffa3-46a7-9028-e9db800aae2d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\AssertionException.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\TestCase.cpp">
+      <Filter>Test\UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\UnitTest.cpp">
+      <Filter>Test\UnitTest</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\TimedTest.cpp">
+      <Filter>Test\TimedTest</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\TimedTestCase.cpp">
+      <Filter>Test\TimedTest</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\TestEnvironment.cpp">
+      <Filter>Test\TestEnvironment</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\Timer.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\ConsecutiveNumberGenerator.cpp">
+      <Filter>ItemGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\ConstantNumberGenerator.cpp">
+      <Filter>ItemGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\RandomNumberGenerator.cpp">
+      <Filter>ItemGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="dependencies\ReverseNumberGenerator.cpp">
+      <Filter>ItemGenerator</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dependencies\ArrayIterator.h">
+      <Filter>Sequence\ArraySequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ArraySequence.h">
+      <Filter>Sequence\ArraySequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\DynamicArray.h">
+      <Filter>Sequence\ArraySequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\MutableArrayIterator.h">
+      <Filter>Sequence\ArraySequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\AssertionException.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ITestCase.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\LinkedList.h">
+      <Filter>Sequence\ListSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ListIterator.h">
+      <Filter>Sequence\ListSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ListSequence.h">
+      <Filter>Sequence\ListSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\MutableListIterator.h">
+      <Filter>Sequence\ListSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\Node.h">
+      <Filter>Sequence\ListSequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\Sequence.h">
+      <Filter>Sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\SequenceIterator.h">
+      <Filter>Sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\MutableSequenceIterator.h">
+      <Filter>Sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\TestCase.h">
+      <Filter>Test\UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\UnitTest.h">
+      <Filter>Test\UnitTest</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\TimedTest.h">
+      <Filter>Test\TimedTest</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\TimedTestCase.h">
+      <Filter>Test\TimedTest</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\TestEnvironment.h">
+      <Filter>Test\TestEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\Timer.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ConsecutiveNumberGenerator.h">
+      <Filter>ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ConstantNumberGenerator.h">
+      <Filter>ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\INumberGenerator.h">
+      <Filter>ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ItemGenerator.h">
+      <Filter>ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\RandomNumberGenerator.h">
+      <Filter>ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="dependencies\ReverseNumberGenerator.h">
+      <Filter>ItemGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="IDictionary.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="HashMap.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
