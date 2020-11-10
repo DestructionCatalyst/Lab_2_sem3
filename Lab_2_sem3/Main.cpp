@@ -88,13 +88,56 @@ void SimpleMapTest()
 
 }
 
-int main() {
-	/*
-	IDictionary<int, string>* dict;
+void ResizeTest()
+{
+	IDictionary<int, string>* map = new HashMap<int, string>(
+		[](int key, int tableSize)->int
+		{
+			return key % tableSize;
+		},
+		4
+	);
 
-	HashMap<int, string> map1 = HashMap<int, string>([](int s, int a)->int {return 0
-	//s % a
-	;});
+	map->Add(1, string("aaaa"));
+	map->Add(2, string("bbb"));
+	map->Add(3, string("aaa"));
+	map->Add(65, string("ccc"));
+	map->Add(68, string("ddd"));
+	map->Add(2, string("bbbbbb"));
+
+	map->Remove(65);
+
+	TestEnvironment::Assert(
+		map->Find(1) == string("aaaa") &&
+		map->Find(2) == string("bbbbbb") &&
+		map->Find(3) == string("aaa") &&
+		map->Find(68) == string("ddd")
+	);
+
+	TestEnvironment::AssertThrows(
+		[&]()->void
+		{
+			map->Find(65);
+		},
+		key_not_found("")
+			);
+	TestEnvironment::AssertThrows(
+		[&]()->void
+		{
+			map->Find(66);
+		},
+		key_not_found("")
+			);
+
+	delete(map);
+}
+
+int main() {
+
+
+	HashMap<int, string> map1 = HashMap<int, string>([](int s, int a)->int {return
+	s % a
+	;}, 4);
 
 	map1.Add(1, string("aaaa"));
 	map1.Add(2, string("bbb"));
@@ -104,11 +147,12 @@ int main() {
 	map1.Add(2, string("bbbbbb"));
 
 	map1.Remove(65);
-	*/
+	
 	TestEnvironment env{};
 
 	ADD_NEW_TEST(env, "List remove test", TestListRemove);
 	ADD_NEW_TEST(env, "Simple map test", SimpleMapTest);
+	ADD_NEW_TEST(env, "Resize map test", ResizeTest);
 
 	env.RunAll();
 	

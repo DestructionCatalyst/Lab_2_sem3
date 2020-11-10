@@ -40,6 +40,12 @@
     <Filter Include="ItemGenerator">
       <UniqueIdentifier>{51631814-ffa3-46a7-9028-e9db800aae2d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dictionary">
+      <UniqueIdentifier>{44c77b36-68f8-41fa-9341-d027db1d6dee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Matrix">
+      <UniqueIdentifier>{cdb190a7-e6fd-4dc0-a928-017b02956ea3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -77,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="dependencies\ReverseNumberGenerator.cpp">
       <Filter>ItemGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="Coordinates.cpp">
+      <Filter>Matrix</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,11 +167,14 @@
     <ClInclude Include="dependencies\ReverseNumberGenerator.h">
       <Filter>ItemGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="IDictionary.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="HashMap.h">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="IDictionary.h">
+      <Filter>Dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="Coordinates.h">
+      <Filter>Matrix</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

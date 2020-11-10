@@ -60,6 +60,8 @@ namespace dictionary
 			{
 				iter.SetContent(pair);
 			}
+
+			Grow();
 		}
 		virtual void Remove(K key)
 		{
@@ -79,6 +81,10 @@ namespace dictionary
 
 			if (iter != target->end())
 				target->Remove(itemIndex);
+
+			itemsCount--;
+
+			Shrink();
 		}
 		virtual V Find(K key)
 		{
@@ -115,6 +121,46 @@ namespace dictionary
 			}
 
 			return iter;
+		}
+		double FillCoefficient()
+		{
+			return (double)itemsCount / GetCapacity();
+		}
+		void Grow()
+		{
+			if (FillCoefficient() > 0.75)
+				Resize(GetCapacity() * 2);
+		}
+		void Shrink()
+		{
+			if (GetCapacity() > default_size && FillCoefficient() < 0.5)
+				Resize(GetCapacity() / 2);
+		}
+		void Resize(int newSize)
+		{
+			DynamicArray<LinkedList<KeyValuePair>*>* oldTable = table;
+			table = new DynamicArray<LinkedList<KeyValuePair>*>(newSize);
+
+			for (int i = 0; i < newSize; i++)
+				table->Set(new LinkedList<KeyValuePair>, i);
+
+			LinkedList<KeyValuePair>* cur;
+			SameHashIterator iter = nullptr;
+			KeyValuePair curPair;
+
+			itemsCount = 0;
+
+			for (int i = 0; i < oldTable->GetCapacity(); i++)
+			{
+				cur = oldTable->Get(i);
+
+				for (iter = cur->begin(); iter != cur->end(); ++iter)
+				{
+					curPair = *iter;
+					Add(curPair.first, curPair.second);
+				}
+				
+			}
 		}
 	public:
 		~HashMap()
