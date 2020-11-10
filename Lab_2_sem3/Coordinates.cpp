@@ -6,9 +6,9 @@ namespace matrix {
 		int key = table_size - 1;
 		int hash_result = 0;
 
-		hash_result = (key * hash_result + coord.GetRow()) % table_size;
+		hash_result = coord.GetRow() % table_size;
 		hash_result = (key * hash_result + coord.GetColumn()) % table_size;
-		hash_result = (hash_result * 2 + 1) % table_size;
+		hash_result = (key * hash_result) % table_size;
 
 		return hash_result;
 	}

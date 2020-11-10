@@ -8,11 +8,13 @@
 
 #include "IDictionary.h"
 #include "HashMap.h"
+#include "Coordinates.h"
 
 #include <Windows.h>
 
 
 using namespace dictionary;
+using namespace matrix;
 
 void TestListRemove()
 {
@@ -132,6 +134,16 @@ void ResizeTest()
 	delete(map);
 }
 
+void CoordsTest()
+{
+	Coordinates c{ 6, 11 };
+
+	int actual = CoordinatesHash(c, 8);
+	int expected = 3;
+
+	TestEnvironment::Assert(expected == actual);
+}
+
 int main() {
 
 
@@ -153,6 +165,7 @@ int main() {
 	ADD_NEW_TEST(env, "List remove test", TestListRemove);
 	ADD_NEW_TEST(env, "Simple map test", SimpleMapTest);
 	ADD_NEW_TEST(env, "Resize map test", ResizeTest);
+	ADD_NEW_TEST(env, "Matrix coordinates test", CoordsTest);
 
 	env.RunAll();
 	
