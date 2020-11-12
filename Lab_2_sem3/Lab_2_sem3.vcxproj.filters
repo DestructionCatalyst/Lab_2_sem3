@@ -176,5 +176,8 @@
     <ClInclude Include="Coordinates.h">
       <Filter>Matrix</Filter>
     </ClInclude>
+    <ClInclude Include="SparseMatrix.h">
+      <Filter>Matrix</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@
 #include "IDictionary.h"
 #include "HashMap.h"
 #include "Coordinates.h"
+#include "SparseMatrix.h"
 
 #include <Windows.h>
 
@@ -138,10 +139,29 @@ void CoordsTest()
 {
 	Coordinates c{ 6, 11 };
 
-	int actual = CoordinatesHash(c, 8);
-	int expected = 3;
+	int actual = coordinatesHash(c, 8);
+	int expected = 7;
 
 	TestEnvironment::Assert(expected == actual);
+}
+
+void SimpleMatrixTest()
+{
+	int a[] = {
+		 0, 0, 0, 0, 1, 0, 0, 2, 0, 0 ,
+		 3, 0, 0, 0, 0, 0, 0, 0, 0, 4 ,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,
+		 0, 9, 0, 0, 0, 0, 0, 0, 0, 0 ,
+		 0, 0, 0, 0, 5, 5, 0, 0, 0, 0 ,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,
+		 0, 0, 0, 0, 0, 3, 0, 0, 0, 0 ,
+		 0, 0, 6, 0, 0, 0, 0, 0, 0, 0 ,
+		 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 
+	};
+
+	SparseMatrix<int> m = SparseMatrix<int>(a, 10, 10);
+	m.Print();
 }
 
 int main() {
@@ -166,6 +186,7 @@ int main() {
 	ADD_NEW_TEST(env, "Simple map test", SimpleMapTest);
 	ADD_NEW_TEST(env, "Resize map test", ResizeTest);
 	ADD_NEW_TEST(env, "Matrix coordinates test", CoordsTest);
+	ADD_NEW_TEST(env, "Simple Matrix test", SimpleMatrixTest);
 
 	env.RunAll();
 	
