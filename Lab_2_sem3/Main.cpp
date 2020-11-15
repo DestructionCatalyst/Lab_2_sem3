@@ -72,6 +72,11 @@ void SimpleMapTest()
 		map->Find(68) == string("ddd")
 	);
 
+	//HashMap<int, string>::iterator iter = dynamic_cast<HashMap<int, string>*>(map)->Iterator();
+
+	//for (; iter != HashMap<int, string>::iterator(); ++iter)
+		//std::cout << (*iter).second << std::endl;
+
 	TestEnvironment::AssertThrows(
 		[&]()->void
 		{
@@ -161,6 +166,14 @@ void SimpleMatrixTest()
 	};
 
 	SparseMatrix<int> m = SparseMatrix<int>(a, 10, 10);
+
+	m.Map(
+		[](int n) -> int
+		{
+			return n * 2;
+		}
+	);
+
 	m.Print();
 }
 

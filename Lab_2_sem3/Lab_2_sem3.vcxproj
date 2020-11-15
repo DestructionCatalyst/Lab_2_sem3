@@ -180,6 +180,7 @@
     <ClInclude Include="dependencies\Timer.h" />
     <ClInclude Include="dependencies\UnitTest.h" />
     <ClInclude Include="HashMap.h" />
+    <ClInclude Include="HashMapIterator.h" />
     <ClInclude Include="IDictionary.h" />
     <ClInclude Include="Coordinates.h" />
     <ClInclude Include="SparseMatrix.h" />

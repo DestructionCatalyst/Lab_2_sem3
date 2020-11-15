@@ -14,7 +14,7 @@ namespace matrix {
 	template<class T>
 	class SparseMatrix {
 	private:
-		HashMap<Coordinates, T>* values;
+		IDictionary<Coordinates, T>* values;
 
 		int rows;
 		int columns;
@@ -35,7 +35,7 @@ namespace matrix {
 		}
 
 	public:
-		T Get(int row, int column)
+		T Get(int row, int column) const
 		{
 			try
 			{
@@ -47,7 +47,7 @@ namespace matrix {
 			}
 		}
 		//TODO remake with map/reduce, prob fix line length
-		void Print()
+		void Print() const
 		{
 			for (int i = 0; i < rows; i++) {
 				cout << "|| ";
@@ -58,5 +58,39 @@ namespace matrix {
 				cout << "||" << endl;
 			}
 		}
+	public:
+		//Order is pretty much random
+		void Map(std::function<T(T)> f)
+		{
+			HashMapIterator<Coordinates, T> iter = dynamic_cast<HashMap<Coordinates, T>*>(values)->Iterator();
+
+			for (; iter != HashMap<Coordinates, T>::iterator(); ++iter)
+				values->Add((*iter).first, f((*iter).second));
+		}
+
+		friend SparseMatrix<T> operator+ (const SparseMatrix<T>& m1, const SparseMatrix<T>& m2);
 	};
+
+	class MatrixSizeMismatchException : public std::invalid_argument
+	{
+	public:
+		MatrixSizeMismatchException(const char* message):
+			std::invalid_argument(message)
+		{}
+	};
+
+	template<class T>
+	SparseMatrix<T> operator+(const SparseMatrix<T>& m1, const SparseMatrix<T>& m2)
+	{
+		if (m1.rows != m2.rows)
+			throw MatrixSizeMismatchException("Row count doesn't match, addition is impossible");
+		if (m1.columns != m2.columns)
+			throw MatrixSizeMismatchException("Column count doesn't match, addition is impossible");
+
+		SparseMatrix<T>* sum = new SparseMatrix<T>(m1.rows, m1.columns);
+
+		
+
+		return SparseMatrix<T>();
+	}
 }

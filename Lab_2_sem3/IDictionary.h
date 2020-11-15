@@ -10,7 +10,7 @@ namespace dictionary {
 	public:
 		virtual void Add(K key, V value) = 0;
 		virtual void Remove(K key) = 0;
-		virtual V Find(K key) = 0;
+		virtual V Find(K key) const = 0;
 
 		virtual ~IDictionary()
 		{};

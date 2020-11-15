@@ -179,5 +179,8 @@
     <ClInclude Include="SparseMatrix.h">
       <Filter>Matrix</Filter>
     </ClInclude>
+    <ClInclude Include="HashMapIterator.h">
+      <Filter>Dictionary</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IDictionary.h"
+#include "HashMapIterator.h"
 
 #include "dependencies/DynamicArray.h"
 #include "dependencies/LinkedList.h"
@@ -24,6 +25,7 @@ namespace dictionary
 		//Hash function takes an item and a table size, and returns an index, < table size
 		typedef std::function<int(K, int)> HashFunction;
 		typedef sequences::iterators::MutableListIterator<KeyValuePair> SameHashIterator;
+		typedef HashMapIterator<K, V> iterator;
 	private:
 		DynamicArray<LinkedList<KeyValuePair>*>* table;
 		HashFunction hashFunction;
@@ -41,7 +43,7 @@ namespace dictionary
 				table->Set(new LinkedList<KeyValuePair>, i);
 		}
 	public:
-		virtual void Add(K key, V value)
+		virtual void Add(K key, V value) override
 		{
 			int hash = Hash(key);
 
@@ -63,7 +65,7 @@ namespace dictionary
 
 			Grow();
 		}
-		virtual void Remove(K key)
+		virtual void Remove(K key) override
 		{
 			int listIndex = Hash(key);
 
@@ -86,7 +88,7 @@ namespace dictionary
 
 			Shrink();
 		}
-		virtual V Find(K key)
+		virtual V Find(K key) const override
 		{
 			SameHashIterator item = FindExactItem(key);
 			
@@ -96,18 +98,18 @@ namespace dictionary
 				throw key_not_found("Key is not in dictionary!");
 		}
 	public:
-		int GetCapacity()
+		int GetCapacity() const
 		{
 			return table->GetCapacity();
 		}
 		
 	private:
-		int Hash(K key)
+		int Hash(K key) const
 		{
 			return hashFunction(key, GetCapacity());
 		}
 		//Returns iterator at the KeyValuePair with this key or target->end() if it's not in this map  
-		SameHashIterator FindExactItem(K key)
+		SameHashIterator FindExactItem(K key) const 
 		{
 			int hash = Hash(key);
 
@@ -122,7 +124,7 @@ namespace dictionary
 
 			return iter;
 		}
-		double FillCoefficient()
+		double FillCoefficient() const
 		{
 			return (double)itemsCount / GetCapacity();
 		}
@@ -161,6 +163,11 @@ namespace dictionary
 				}
 				
 			}
+		}
+	public:
+		iterator Iterator()
+		{
+			return HashMapIterator<K, V>(table);
 		}
 	public:
 		~HashMap()
