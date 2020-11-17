@@ -36,15 +36,8 @@ void TestEnvironment::Assert(int expression)
 		throw AssertionException();
 }
 
-void TestEnvironment::AssertThrows(function<void()> thrower, std::exception exceptionType)
+void TestEnvironment::AssertThrows(function<void()> thrower, std::exception&& exceptionType)
 {
-	try {
-		thrower();
-		Assert(false);
-	}
-	catch (std::exception e) {
-		Assert(typeid(exceptionType) == typeid(e));
-	}
 }
 
 TestEnvironment::~TestEnvironment()

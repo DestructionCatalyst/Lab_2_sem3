@@ -31,16 +31,15 @@ void TestListRemove()
 
 	smallList->Remove(0);
 
-	TestEnvironment::Assert(
-		list->Get(0) == 1 &&
-		list->Get(1) == 2 &&
-		list->Get(2) == 4 &&
-		list->Get(3) == 5 &&
-		list->Get(4) == 6 &&
-		list->GetLength() == 5 &&
+	ASSERT_EQUALS(list->Get(0), 1);
+	ASSERT_EQUALS(list->Get(1), 2);
+	ASSERT_EQUALS(list->Get(2), 4);
+	ASSERT_EQUALS(list->Get(3), 5);
+	ASSERT_EQUALS(list->Get(4), 6);
 
-		smallList->GetLength() == 0
-	);
+	ASSERT_EQUALS(list->GetLength(), 5);
+
+	ASSERT_EQUALS(smallList->GetLength(), 0);
 
 	delete(list);
 	delete(smallList);
@@ -65,32 +64,18 @@ void SimpleMapTest()
 
 	map->Remove(65);
 
-	TestEnvironment::Assert(
-		map->Find(1) == string("aaaa") &&
-		map->Find(2) == string("bbbbbb") &&
-		map->Find(3) == string("aaa") &&
-		map->Find(68) == string("ddd")
-	);
+	ASSERT_EQUALS(map->Find(1), string("aaaa"));
+	ASSERT_EQUALS(map->Find(2), string("bbbbbb"));
+	ASSERT_EQUALS(map->Find(3), string("aaa"));
+	ASSERT_EQUALS(map->Find(68), string("ddd"));
 
 	//HashMap<int, string>::iterator iter = dynamic_cast<HashMap<int, string>*>(map)->Iterator();
 
 	//for (; iter != HashMap<int, string>::iterator(); ++iter)
 		//std::cout << (*iter).second << std::endl;
 
-	TestEnvironment::AssertThrows(
-		[&]()->void
-		{
-			map->Find(65);
-		},
-		key_not_found("")
-	);
-	TestEnvironment::AssertThrows(
-		[&]()->void
-		{
-			map->Find(66);
-		},
-		key_not_found("")
-			);
+	ASSERT_THROWS(map->Find(65), key_not_found);
+	ASSERT_THROWS(map->Find(66), key_not_found);
 
 	delete(map);
 
@@ -115,27 +100,13 @@ void ResizeTest()
 
 	map->Remove(65);
 
-	TestEnvironment::Assert(
-		map->Find(1) == string("aaaa") &&
-		map->Find(2) == string("bbbbbb") &&
-		map->Find(3) == string("aaa") &&
-		map->Find(68) == string("ddd")
-	);
+	ASSERT_EQUALS(map->Find(1),string("aaaa"));
+	ASSERT_EQUALS(map->Find(2), string("bbbbbb"));
+	ASSERT_EQUALS(map->Find(3), string("aaa"));
+	ASSERT_EQUALS(map->Find(68), string("ddd"));
 
-	TestEnvironment::AssertThrows(
-		[&]()->void
-		{
-			map->Find(65);
-		},
-		key_not_found("")
-			);
-	TestEnvironment::AssertThrows(
-		[&]()->void
-		{
-			map->Find(66);
-		},
-		key_not_found("")
-			);
+	ASSERT_THROWS(map->Find(65), key_not_found);
+	ASSERT_THROWS(map->Find(66), key_not_found);
 
 	delete(map);
 }
@@ -147,7 +118,7 @@ void CoordsTest()
 	int actual = coordinatesHash(c, 8);
 	int expected = 7;
 
-	TestEnvironment::Assert(expected == actual);
+	ASSERT_EQUALS(expected, actual);
 }
 
 void SimpleMatrixTest()
@@ -174,7 +145,50 @@ void SimpleMatrixTest()
 		}
 	);
 
-	m.Print();
+	int sum = m.Reduce(
+		[](int b, int c) -> int
+		{
+			return b + c;
+		},
+		0
+	);
+	
+	std::cout << m;
+
+	ASSERT_EQUALS(sum, 76);
+}
+
+void MatrixAdditionTest()
+{
+	int a[] =
+	{
+		0, 0, 0, 0, 0,
+		0, 1, 0, 0, 0,
+		0, 0, 0, 5, 0,
+		0, 0, -2, 0, 0
+	};
+
+	int b[] =
+	{
+		0, 0, 0, 0, 8,
+		0, 3, 0, 0, 0,
+		0, 0, 0, 0, 0,
+		0, 0, 2, 0, 0
+	};
+
+	SparseMatrix<int> mA{ a, 4, 5 };
+	SparseMatrix<int> mB{ b, 4, 5 };
+
+	SparseMatrix<int> sum = mA + mB;
+
+	std::cout << mA << std::endl << mB << std::endl << sum;
+	//TODO assert equality
+
+	int c[] = { 0, 0, 1, 0 };
+
+	SparseMatrix<int> mC{ c, 2, 2 };
+
+	ASSERT_THROWS(mA + mC, MatrixSizeException);
 }
 
 int main() {
@@ -200,6 +214,7 @@ int main() {
 	ADD_NEW_TEST(env, "Resize map test", ResizeTest);
 	ADD_NEW_TEST(env, "Matrix coordinates test", CoordsTest);
 	ADD_NEW_TEST(env, "Simple Matrix test", SimpleMatrixTest);
+	ADD_NEW_TEST(env, "Matrix addition test", MatrixAdditionTest);
 
 	env.RunAll();
 	

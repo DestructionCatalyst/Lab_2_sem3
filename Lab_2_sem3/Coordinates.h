@@ -1,9 +1,9 @@
 #pragma once
 #include <utility>
+#include <stdexcept>
 
 #define PRIME1 31
 #define PRIME2 47
-
 
 namespace matrix {
 	class Coordinates {
@@ -17,7 +17,10 @@ namespace matrix {
 		}
 		Coordinates(int row, int col)
 		{
-			coords = std::make_pair(row, col);
+			if (row >= 0 && col >= 0)
+				coords = std::make_pair(row, col);
+			else
+				throw std::invalid_argument("Index of coordinates can't be negative!");
 		}
 	public:
 		int GetRow()
