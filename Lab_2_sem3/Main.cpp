@@ -74,6 +74,18 @@ void SimpleMapTest()
 	//for (; iter != HashMap<int, string>::iterator(); ++iter)
 		//std::cout << (*iter).second << std::endl;
 
+	IDictionary<int, string>* map1 = map->Map(
+		[](string s)->string
+		{
+			return s.append("1");
+		}
+	);
+
+	ASSERT_EQUALS(map1->Find(1), string("aaaa1"));
+	ASSERT_EQUALS(map1->Find(2), string("bbbbbb1"));
+	ASSERT_EQUALS(map1->Find(3), string("aaa1"));
+	ASSERT_EQUALS(map1->Find(68), string("ddd1"));
+
 	ASSERT_THROWS(map->Find(65), key_not_found);
 	ASSERT_THROWS(map->Find(66), key_not_found);
 
@@ -138,14 +150,14 @@ void SimpleMatrixTest()
 
 	SparseMatrix<int> m = SparseMatrix<int>(a, 10, 10);
 
-	m.Map(
+	SparseMatrix<int> m1 = m.Map(
 		[](int n) -> int
 		{
 			return n * 2;
 		}
 	);
 
-	int sum = m.Reduce(
+	int sum = m1.Reduce(
 		[](int b, int c) -> int
 		{
 			return b + c;
@@ -153,7 +165,7 @@ void SimpleMatrixTest()
 		0
 	);
 	
-	std::cout << m;
+	std::cout << m1;
 
 	ASSERT_EQUALS(sum, 76);
 }
@@ -181,8 +193,19 @@ void MatrixAdditionTest()
 
 	SparseMatrix<int> sum = mA + mB;
 
-	std::cout << mA << std::endl << mB << std::endl << sum;
-	//TODO assert equality
+	//std::cout << mA << std::endl << mB << std::endl << sum;
+
+	int exp[] =
+	{
+		0, 0, 0, 0, 8,
+		0, 4, 0, 0, 0,
+		0, 0, 0, 5, 0,
+		0, 0, 0, 0, 0
+	};
+
+	SparseMatrix<int> expected{ exp, 4, 5 };
+
+	ASSERT_EQUALS(expected, sum);
 
 	int c[] = { 0, 0, 1, 0 };
 

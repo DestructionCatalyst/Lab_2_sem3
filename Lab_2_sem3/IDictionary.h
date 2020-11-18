@@ -12,6 +12,10 @@ namespace dictionary {
 		virtual void Remove(K key) = 0;
 		virtual V Find(K key) const = 0;
 
+		virtual IDictionary<K, V>* Map(std::function<V(V)>) = 0;
+		//TODO reduce
+		//TODO zip
+
 		virtual ~IDictionary()
 		{};
 	};

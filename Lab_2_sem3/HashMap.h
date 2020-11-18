@@ -102,7 +102,18 @@ namespace dictionary
 		{
 			return table->GetCapacity();
 		}
-		
+	public:
+		IDictionary<K,V>* Map(std::function<V(V)> f)
+		{
+			HashMap<K, V>* res = new HashMap(hashFunction, GetCapacity());
+
+			iterator iter = Iterator();
+
+			for (; iter != End(); ++iter)
+				res->Add((*iter).first, f((*iter).second));
+
+			return res;
+		}
 	private:
 		int Hash(K key) const
 		{
@@ -168,6 +179,10 @@ namespace dictionary
 		iterator Iterator()
 		{
 			return HashMapIterator<K, V>(table);
+		}
+		iterator End()
+		{
+			return HashMapIterator<K, V>();
 		}
 	public:
 		~HashMap()

@@ -1,16 +1,14 @@
 #pragma once
 
-#include <iostream>
 #include <sstream>
-
+#include <utility>
 
 #include "HashMap.h"
 #include "Coordinates.h"
 
 using namespace dictionary;
 
-using std::cout;
-using std::endl;
+using std::pair;
 
 namespace matrix {
 
@@ -51,7 +49,7 @@ namespace matrix {
 		SparseMatrix(const SparseMatrix<T>& m) :
 			SparseMatrix(m.rows, m.columns)
 		{
-			m.ConstantMap(
+			m.ForEach(
 				[&](Coordinates coord, T item)->void
 				{
 					values->Add(coord, item);
@@ -101,31 +99,15 @@ namespace matrix {
 		}
 	public:
 		//Order is pretty much random
-		void Map(std::function<T(T)> f)
+		SparseMatrix<T> Map(std::function<T(T)> f)
 		{
-			iterator iter = Iterator();
+			SparseMatrix<T>* res = new SparseMatrix<T>(rows, columns);
 
-			for (; iter != End(); ++iter)
-				values->Add((*iter).first, f((*iter).second));
-		}
-		//For operations that don't change matrix items
-		void ConstantMap(std::function<void(Coordinates, T)> f) const
-		{
-			iterator iter = Iterator();
+			IDictionary<Coordinates, T>* resValues = values->Map(f);
 
-			for (; iter != End(); ++iter)
-				f((*iter).first, (*iter).second);
-		}
-		//Processes row-by-row, including zeros. Executes betweenRows(int) after each row, passing current row number
-		void FullConstantMap(std::function<void(T)> f, std::function<void(int)> betweenRows = [](int)->void {}) const
-		{
-			for (int i = 0; i < rows; i++)////////////////////////
-			{
-				for (int j = 0; j < columns; j++)////////////////////////
-					f(Get(i, j));
+			res->values = resValues;
 
-				betweenRows(i);
-			}
+			return *res;
 		}
 		T Reduce(std::function<T(T, T)> f, T startItem) const
 		{
@@ -138,6 +120,29 @@ namespace matrix {
 
 			return result;
 		}
+	private:
+		//For operations that don't change matrix items
+		void ForEach(std::function<void(Coordinates, T)> f) const
+		{
+			iterator iter = Iterator();
+
+			for (; iter != End(); ++iter)
+				f((*iter).first, (*iter).second);
+		}
+		//Processes row-by-row, including zeros. Executes betweenRows(int) after each row, passing current row number
+		void FullForEach(std::function<void(T)> f, std::function<void(int)> betweenRows = [](int)->void {}) const
+		{
+			for (int i = 0; i < rows; i++)////////////////////////
+			{
+				for (int j = 0; j < columns; j++)////////////////////////
+					f(Get(i, j));
+
+				betweenRows(i);
+			}
+		}
+	
+		
+
 	public:
 		iterator Iterator() const
 		{
@@ -153,6 +158,12 @@ namespace matrix {
 
 		template<class T1>
 		friend std::ostream& operator<< (std::ostream& stream, const SparseMatrix<T1>& matrix);
+
+		template<class T1>
+		friend bool operator== (const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2);
+
+		template<class T1>
+		friend bool operator!= (const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2);
 	};
 
 	
@@ -210,7 +221,7 @@ namespace matrix {
 
 		stream << "||";
 
-		matrix.FullConstantMap(
+		matrix.FullForEach(
 			[&](T item)->void
 			{
 				stream << AddSpacing(item, maxLength);
@@ -238,7 +249,7 @@ namespace matrix {
 
 		SparseMatrix<T>* sum = new SparseMatrix<T>(m1);
 
-		m2.ConstantMap(
+		m2.ForEach(
 			[&](Coordinates c, T item)->void
 			{
 				T itemSum = item + m1.Get(c);
@@ -248,5 +259,39 @@ namespace matrix {
 		);
 
 		return *sum;
+	}
+
+	template<class T>
+	bool operator==(const SparseMatrix<T>& m1, const SparseMatrix<T>& m2)
+	{
+
+		if (m1.rows != m2.rows)
+			throw MatrixSizeException("Row count doesn't match, comparsion is impossible");
+		if (m1.columns != m2.columns)
+			throw MatrixSizeException("Column count doesn't match, comparsion is impossible");
+
+		bool equal = true;
+
+		m1.ForEach(
+			[&](Coordinates c, T value)->void
+			{
+					equal = equal && (value == m2.Get(c));
+			}
+		);
+
+		m2.ForEach(
+			[&](Coordinates c, T value)->void
+			{
+				equal = equal && (value == m1.Get(c));
+			}
+		);
+
+		return equal;
+	}
+
+	template<class T1>
+	bool operator!=(const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2)
+	{
+		return !(m1 == m2);
 	}
 }
