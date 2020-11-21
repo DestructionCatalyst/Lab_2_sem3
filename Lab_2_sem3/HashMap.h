@@ -103,7 +103,7 @@ namespace dictionary
 			return table->GetCapacity();
 		}
 	public:
-		IDictionary<K,V>* Map(std::function<V(V)> f)
+		IDictionary<K, V>* Map(std::function<V(V)> f) const
 		{
 			HashMap<K, V>* res = new HashMap(hashFunction, GetCapacity());
 
@@ -176,11 +176,11 @@ namespace dictionary
 			}
 		}
 	public:
-		iterator Iterator()
+		iterator Iterator() const
 		{
 			return HashMapIterator<K, V>(table);
 		}
-		iterator End()
+		iterator End() const
 		{
 			return HashMapIterator<K, V>();
 		}

@@ -150,7 +150,7 @@ void SimpleMatrixTest()
 
 	SparseMatrix<int> m = SparseMatrix<int>(a, 10, 10);
 
-	SparseMatrix<int> m1 = m.Map(
+	SparseMatrix<int> m1 = *m.Map(
 		[](int n) -> int
 		{
 			return n * 2;
@@ -214,6 +214,83 @@ void MatrixAdditionTest()
 	ASSERT_THROWS(mA + mC, MatrixSizeException);
 }
 
+void MatrixOnScalarMultiplicationTest()
+{
+	int a[] =
+	{
+		0, 0, 0, 8, 0,
+		0, 1, 0, 0, 0,
+		0, 0, 0, 5, 0,
+		0, 0, -2, 0, 0
+	};
+
+	int exp[] =
+	{
+		0, 0, 0, -24, 0,
+		0, -3, 0, 0, 0,
+		0, 0, 0, -15, 0,
+		0, 0, 6, 0, 0
+	};
+
+	int scalar = -3;
+
+	SparseMatrix<int> mA{ a, 4, 5 };
+	SparseMatrix<int> expected{ exp, 4, 5 };
+
+	ASSERT_EQUALS(expected, scalar * mA);
+}
+
+void MatrixMultiplicationTest()
+{
+	int e1[] =
+	{
+		1, 0, 0, 0, 0, 0,
+		0, 1, 0, 0, 0, 0,
+		0, 0, 1, 0, 0, 0,
+		0, 0, 0, 1, 0, 0,
+		0, 0, 0, 0, 1, 0,
+		0, 0, 0, 0, 0, 1
+	};
+
+	SparseMatrix<int> m1{ e1, 6, 6 };
+	//SparseMatrix<int> m2{ e1, 6, 6 };
+
+	//std::cout << m1 * m1;
+
+	ASSERT_EQUALS(m1, m1 * m1);
+
+	int a[] =
+	{
+		3, 0, 0, 0,
+		0, 2, 1, 0
+		
+	};
+
+	int b[] =
+	{
+		0, 1, 0,
+		1, 1, 0,
+		0, 1, 0,
+		1, 0, 0
+	};
+
+	int exp[] =
+	{
+		0, 3, 0,
+		2, 3, 0
+	};
+
+	SparseMatrix<int> mA { a, 2, 4 };
+	SparseMatrix<int> mB{ b, 4, 3 };
+	SparseMatrix<int> expected{ exp, 2, 3 };
+
+	//std::cout << mA * mB;
+
+	ASSERT_EQUALS(expected, mA * mB);
+
+	ASSERT_THROWS(m1 * mA, MatrixSizeException);
+}
+
 int main() {
 
 
@@ -238,6 +315,8 @@ int main() {
 	ADD_NEW_TEST(env, "Matrix coordinates test", CoordsTest);
 	ADD_NEW_TEST(env, "Simple Matrix test", SimpleMatrixTest);
 	ADD_NEW_TEST(env, "Matrix addition test", MatrixAdditionTest);
+	ADD_NEW_TEST(env, "Matrix on scalar multiplication test", MatrixOnScalarMultiplicationTest);
+	ADD_NEW_TEST(env, "Matrix multiplication test", MatrixMultiplicationTest);
 
 	env.RunAll();
 	

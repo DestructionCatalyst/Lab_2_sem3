@@ -89,17 +89,17 @@ namespace matrix {
 		{
 			Set(Coordinates(row, column), item);
 		}
-		int GetRows()
+		int GetRows() const
 		{
 			return rows;
 		}
-		int GetColumns()
+		int GetColumns() const
 		{
 			return columns;
 		}
 	public:
 		//Order is pretty much random
-		SparseMatrix<T> Map(std::function<T(T)> f)
+		SparseMatrix<T>* Map(std::function<T(T)> f) const
 		{
 			SparseMatrix<T>* res = new SparseMatrix<T>(rows, columns);
 
@@ -107,7 +107,7 @@ namespace matrix {
 
 			res->values = resValues;
 
-			return *res;
+			return res;
 		}
 		T Reduce(std::function<T(T, T)> f, T startItem) const
 		{
@@ -154,7 +154,7 @@ namespace matrix {
 		}
 	public:
 		template<class T1>
-		friend SparseMatrix<T1> operator+ (const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2);
+		friend SparseMatrix<T1>& operator+ (const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2);
 
 		template<class T1>
 		friend std::ostream& operator<< (std::ostream& stream, const SparseMatrix<T1>& matrix);
@@ -164,6 +164,12 @@ namespace matrix {
 
 		template<class T1>
 		friend bool operator!= (const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2);
+
+		template<class T1>
+		friend SparseMatrix<T1>& operator*(const T1 scalar, const SparseMatrix<T1>& m);
+
+		template<class T1>
+		friend SparseMatrix <T1>& operator*(const SparseMatrix<T1> & m1, const SparseMatrix<T1> & m2);
 	};
 
 	
@@ -237,10 +243,9 @@ namespace matrix {
 
 		return stream;
 	}
-	
 
 	template<class T>
-	SparseMatrix<T> operator+(const SparseMatrix<T>& m1, const SparseMatrix<T>& m2)
+	SparseMatrix<T>& operator+(const SparseMatrix<T>& m1, const SparseMatrix<T>& m2)
 	{
 		if (m1.rows != m2.rows)
 			throw MatrixSizeException("Row count doesn't match, addition is impossible");
@@ -266,9 +271,9 @@ namespace matrix {
 	{
 
 		if (m1.rows != m2.rows)
-			throw MatrixSizeException("Row count doesn't match, comparsion is impossible");
+			return false;
 		if (m1.columns != m2.columns)
-			throw MatrixSizeException("Column count doesn't match, comparsion is impossible");
+			return false;
 
 		bool equal = true;
 
@@ -293,5 +298,41 @@ namespace matrix {
 	bool operator!=(const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2)
 	{
 		return !(m1 == m2);
+	}
+
+	template<class T1>
+	SparseMatrix<T1>& operator*(const T1 scalar, const SparseMatrix<T1>& m)
+	{
+		SparseMatrix<T1>* res =  m.Map(
+			[&](T1 item)-> T1
+			{
+				return scalar * item;
+			}
+		);
+
+		return *res;
+	}
+
+	template<class T1>
+	SparseMatrix<T1>& operator*(const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2)
+	{
+		if (m1.GetColumns() != m2.GetRows())
+			throw MatrixSizeException("Row count doesn't match, addition is impossible");
+
+		SparseMatrix<T1>* res = new SparseMatrix<T1>(m1.GetRows(), m2.GetColumns());
+
+		m1.ForEach(
+			[&](Coordinates c, T1 item)->void
+			{
+				for (int i = 0; i < m2.GetColumns(); i++)
+				{
+					Coordinates resCoords{ c.GetRow(), i };
+					res->Set(resCoords, res->Get(resCoords) + item * m2.Get(c.GetColumn(), i));
+				}
+			}
+		);
+
+		return *res;
+	
 	}
 }
