@@ -308,7 +308,7 @@ void MatrixPowerTest()
 
 	ASSERT_EQUALS(expected, matrix::pow(mA, 4));
 
-	ASSERT_EQUALS(*make_diagonal(27, 10), matrix::pow(*make_diagonal(3, 10), 3));
+	ASSERT_EQUALS(*make_diagonal(27, 25), matrix::pow(*make_diagonal(3, 25), 3));
 
 	ASSERT_THROWS(matrix::pow(mA, -10), std::invalid_argument);
 
@@ -322,23 +322,27 @@ void MatrixPowerTest()
 	ASSERT_THROWS(matrix::pow(mB, 2), MatrixSizeException);
 }
 
+#define WRITE_TO_FILE(OBJECT, FILENAME) {\
+						std::ofstream out(FILENAME, /*std::ios::binary|*/std::ios::out);\
+						out << (OBJECT);\
+						out.close();\
+						}
+
+#define READ_FROM_FILE(OBJECT, FILENAME) {\
+						std::ifstream in(FILENAME, /*std::ios::binary|*/std::ios::in);\
+						in >> (OBJECT);\
+						in.close();\
+						}
+
 void FileTest()
 {
 	Coordinates c{ 50, 120 };
 
-	std::ofstream out("coords.txt",/*std::ios::binary|*/std::ios::out);
-
-	out << c;
-
-	out.close();
-
-	std::ifstream in("coords.txt",/*std::ios::binary|*/std::ios::in);
+	WRITE_TO_FILE(c, "coords.txt");
 
 	Coordinates input;
 
-	in >> input;
-
-	in.close();
+	READ_FROM_FILE(input, "coords.txt");
 
 	ASSERT_EQUALS(input.GetRow(), 50);
 	ASSERT_EQUALS(input.GetColumn(), 120);
@@ -357,7 +361,50 @@ void FileTest()
 	map->Add(68, string("ddd"));
 	map->Add(2, string("bbbbbb"));
 
-	//std::cout << *dynamic_cast<HashMap<int, string>*>(map);
+	HashMap<int, string>* hMap = dynamic_cast<HashMap<int, string>*>(map);
+
+	WRITE_TO_FILE(*hMap, "map.txt");
+
+	HashMap<int, string>* inMap = new HashMap<int, string>(
+		[](int key, int tableSize)->int
+		{
+			return key % tableSize;
+		}
+	);
+
+	READ_FROM_FILE(*inMap, "map.txt");
+
+	//std::cout << *inMap;
+
+	int a[] =
+	{
+		0, 0, 0, 0, 0,
+		0, 1, 0, 0, 0,
+		0, 0, 0, 5, 0,
+		0, 0, -2, 0, 0
+	};
+
+	SparseMatrix<int> mA { a, 4, 5 };
+
+	WRITE_TO_FILE(mA, "matrix.txt");
+
+	SparseMatrix<int> mB{ 1, 1 };
+
+	READ_FROM_FILE(mB, "matrix.txt");
+
+	ASSERT_EQUALS(mA, mB);
+
+	/*
+	ArraySequence<int>* seq = new ArraySequence<int>({ 1, 3, 6, 5, 0, 28, 7 });
+
+	WRITE_TO_FILE(*seq, "sequence.txt");
+
+	ArraySequence<int>* inArr = new ArraySequence<int>();
+
+	READ_FROM_FILE(*inArr, "sequence.txt");
+
+	std::cout << *inArr;
+	*/
 }
 
 int main() {

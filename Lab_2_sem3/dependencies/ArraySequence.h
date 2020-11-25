@@ -8,6 +8,7 @@
 #include "ArrayIterator.h"
 #include "MutableArrayIterator.h"
 #include "ItemGenerator.h"
+#include "ParseFunctions.h"
 
 #define DEFAULT_SIZE 8
 #define min(num1, num2) ((num1<num2)?num1:num2)
@@ -235,6 +236,7 @@ namespace sequences {
 		{
 			return new const_iterator(this, index);
 		}
+	public:
 		~ArraySequence()
 		{
 			delete(arr);
@@ -246,5 +248,62 @@ namespace sequences {
 				arr->Resize(arr->GetCapacity() * multiplier);
 			}
 		}
+	public:
+		template<class T1>
+		friend std::ostream& operator<< (std::ostream& out, const ArraySequence<T1>& arr);
+		template<class T1>
+		friend std::istream& operator>> (std::istream& in, ArraySequence<T1>& arr);
 	};
+
+	template<class T1>
+	std::ostream& operator<< (std::ostream& out, const ArraySequence<T1>& arr)
+	{
+		out << "[ ";
+
+		iterators::ArrayIterator<T1> iter = arr.dcast(arr.begin());
+		for (; iter != arr.dcast(arr.end()); ++iter)
+		{
+			out << *iter << " ";
+		}
+		out << "]";
+
+		return out;
+	}
+
+	template<class T1>
+	std::istream& operator>>(std::istream& in, ArraySequence<T1>& arr)
+	{
+		std::string first;
+
+		in >> first;
+
+		EnsureFirst(first, '[');
+
+		string tmp;
+
+		T1 typedTmp;
+
+		while (1)
+		{
+			try 
+			{
+				in >> tmp;
+
+				if (tmp == string("]"))
+					break;
+
+				std::stringstream stringstr{ std::move(tmp) };
+
+				stringstr >> typedTmp;
+
+				arr.Append(typedTmp);
+			}
+			catch (...)
+			{
+				break;
+			}
+		}
+
+		return in;
+	}
 }

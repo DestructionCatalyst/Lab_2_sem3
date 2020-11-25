@@ -12,9 +12,12 @@ bool operator!=(Coordinates o1, Coordinates o2)
 {
 	return !(o1 == o2);
 }
-std::ostream& operator<<(std::ostream& out, Coordinates& c)
+std::ostream& operator<<(std::ostream& out, const Coordinates& c)
 {
-	return out << c.coords;
+	out << "(" << c.coords.first << ";" << c.coords.second << ")";
+
+	return out;
+	//return out << c.coords;
 }
 	
 std::istream& operator>>(std::istream& in, Coordinates& c)

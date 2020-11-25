@@ -41,7 +41,7 @@ public:
 	friend bool operator ==(Coordinates o1, Coordinates o2);
 	friend bool operator !=(Coordinates o1, Coordinates o2);
 
-	friend std::ostream& operator<<(std::ostream& out, Coordinates& c);
+	friend std::ostream& operator<<(std::ostream& out, const Coordinates& c);
 	friend std::istream& operator>>(std::istream& in, Coordinates& c);
 		
 };

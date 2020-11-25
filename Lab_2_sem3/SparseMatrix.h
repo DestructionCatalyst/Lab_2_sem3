@@ -2,9 +2,13 @@
 
 #include <sstream>
 #include <utility>
+#include <fstream>
 
 #include "HashMap.h"
 #include "Coordinates.h"
+
+//The bigger and sparsier the matrix is, more effective this is
+#define SPARSED_SEARCH_MULTIPLICATION
 
 using namespace dictionary;
 
@@ -25,6 +29,7 @@ namespace matrix {
 	public:
 		typedef HashMapIterator<Coordinates, T> iterator;
 	private:
+	public:
 		IDictionary<Coordinates, T>* values;
 
 		int rows;
@@ -160,6 +165,11 @@ namespace matrix {
 			return HashMap<Coordinates, T>::iterator();
 		}
 	public:
+		~SparseMatrix()
+		{
+			delete(values);
+		}
+	public:
 		template<class T1>
 		friend SparseMatrix<T1>& operator+ (const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2);
 
@@ -178,10 +188,12 @@ namespace matrix {
 		template<class T1>
 		friend SparseMatrix<T1>& operator*(const SparseMatrix<T1> & m1, const SparseMatrix<T1> & m2);
 
+		template<class T1>
+		friend std::ofstream& operator<< (std::ofstream& stream, const SparseMatrix<T1>& matrix);
 
+		template<class T1>
+		friend std::istream& operator>> (std::istream& stream, SparseMatrix<T1>& matrix);
 	};
-
-	
 
 	template<class T>
 	int PrintedItemLength(T item)
@@ -228,7 +240,7 @@ namespace matrix {
 
 		return res.str();
 	}
-
+	
 	template<class T>
 	std::ostream& operator<< (std::ostream& stream, const SparseMatrix<T>& matrix)
 	{
@@ -252,7 +264,7 @@ namespace matrix {
 
 		return stream;
 	}
-
+	
 	template<class T>
 	SparseMatrix<T>& operator+(const SparseMatrix<T>& m1, const SparseMatrix<T>& m2)
 	{
@@ -331,13 +343,25 @@ namespace matrix {
 		SparseMatrix<T1>* res = new SparseMatrix<T1>(m1.GetRows(), m2.GetColumns());
 
 		m1.ForEach(
-			[&](Coordinates c, T1 item)->void
+			[&](Coordinates c1, T1 item1)->void
 			{
+#ifdef SPARSED_SEARCH_MULTIPLICATION
+				m2.ForEach(
+					[&](Coordinates c2, T1 item2)->void
+					{
+						if (c1.GetColumn() == c2.GetRow())
+							res->Set(c1.GetRow(), c2.GetColumn(),
+								res->Get(c1.GetRow(), c2.GetColumn()) + item1 * item2);
+					}
+				);
+#else
 				for (int i = 0; i < m2.GetColumns(); i++)
 				{
-					Coordinates resCoords{ c.GetRow(), i };
-					res->Set(resCoords, res->Get(resCoords) + item * m2.Get(c.GetColumn(), i));
+					Coordinates resCoords{ c1.GetRow(), i };
+					res->Set(resCoords, res->Get(resCoords) + item1 * m2.Get(c1.GetColumn(), i));
 				}
+#endif // SPARSED_SEARCH_MULTIPLICATION
+
 			}
 		);
 
@@ -356,4 +380,35 @@ namespace matrix {
 	{
 		return m1 + (-1) * m2;
 	}
+
+	template<class T1>
+	std::ofstream& operator<<(std::ofstream& stream, const SparseMatrix<T1>& matrix)
+	{
+		stream << "{ " << matrix.GetRows() << " " << matrix.GetColumns() << " "
+			<< *dynamic_cast<HashMap<Coordinates, T1>*>(matrix.values) << " }";
+
+		return stream;
+	}
+
+	template<class T1>
+	std::istream& operator>>(std::istream& stream, SparseMatrix<T1>& matrix)
+	{
+		string brack;
+
+		stream >> brack;
+
+		EnsureFirst(brack, '{');
+
+		try {
+			stream >> matrix.rows;
+			stream >> matrix.columns;
+			stream >> *dynamic_cast<HashMap<Coordinates, T1>*>(matrix.values);
+		}
+		catch (...)
+		{
+			throw ParseException();
+		}
+		return stream;
+	}
 }
+
