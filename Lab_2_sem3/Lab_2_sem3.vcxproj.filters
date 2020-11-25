@@ -87,6 +87,9 @@
     <ClCompile Include="Coordinates.cpp">
       <Filter>Matrix</Filter>
     </ClCompile>
+    <ClCompile Include="ParseFunctions.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\ArrayIterator.h">
@@ -181,6 +184,15 @@
     </ClInclude>
     <ClInclude Include="HashMapIterator.h">
       <Filter>Dictionary</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixFunctions.h">
+      <Filter>Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="ParseFunctions.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="PairInOut.h">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

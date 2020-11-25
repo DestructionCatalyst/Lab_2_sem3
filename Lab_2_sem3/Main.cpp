@@ -8,11 +8,12 @@
 
 #include "IDictionary.h"
 #include "HashMap.h"
+
 #include "Coordinates.h"
 #include "SparseMatrix.h"
+#include "MatrixFunctions.h"
 
-#include <Windows.h>
-
+#include <fstream>
 
 using namespace dictionary;
 using namespace matrix;
@@ -165,7 +166,7 @@ void SimpleMatrixTest()
 		0
 	);
 	
-	std::cout << m1;
+	//std::cout << m1;
 
 	ASSERT_EQUALS(sum, 76);
 }
@@ -242,17 +243,7 @@ void MatrixOnScalarMultiplicationTest()
 
 void MatrixMultiplicationTest()
 {
-	int e1[] =
-	{
-		1, 0, 0, 0, 0, 0,
-		0, 1, 0, 0, 0, 0,
-		0, 0, 1, 0, 0, 0,
-		0, 0, 0, 1, 0, 0,
-		0, 0, 0, 0, 1, 0,
-		0, 0, 0, 0, 0, 1
-	};
-
-	SparseMatrix<int> m1{ e1, 6, 6 };
+	SparseMatrix<int> m1 = *make_identity<int>(6);
 	//SparseMatrix<int> m2{ e1, 6, 6 };
 
 	//std::cout << m1 * m1;
@@ -291,21 +282,85 @@ void MatrixMultiplicationTest()
 	ASSERT_THROWS(m1 * mA, MatrixSizeException);
 }
 
+void MatrixPowerTest()
+{
+	int a[] =
+	{
+		1, 0, 0, 0, 0,
+		3, 1, 0, 0, 9,
+		0, 0, 0, 0, 0,
+		0, 0, 4, 0, 0,
+		0, 0, 5, 0, 0
+	};
+
+	SparseMatrix<int> mA{ a, 5, 5 };
+
+	int exp[] = 
+	{
+		1, 0, 0, 0, 0,
+		12, 1, 45, 0, 9,
+		0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0
+	};
+
+	SparseMatrix<int> expected{ exp, 5, 5 };
+
+	ASSERT_EQUALS(expected, matrix::pow(mA, 4));
+
+	ASSERT_EQUALS(*make_diagonal(27, 10), matrix::pow(*make_diagonal(3, 10), 3));
+
+	ASSERT_THROWS(matrix::pow(mA, -10), std::invalid_argument);
+
+	int b[] =
+	{
+		1, 2
+	};
+
+	SparseMatrix<int> mB{ b, 1, 2 };
+
+	ASSERT_THROWS(matrix::pow(mB, 2), MatrixSizeException);
+}
+
+void FileTest()
+{
+	Coordinates c{ 50, 120 };
+
+	std::ofstream out("coords.txt",/*std::ios::binary|*/std::ios::out);
+
+	out << c;
+
+	out.close();
+
+	std::ifstream in("coords.txt",/*std::ios::binary|*/std::ios::in);
+
+	Coordinates input;
+
+	in >> input;
+
+	in.close();
+
+	ASSERT_EQUALS(input.GetRow(), 50);
+	ASSERT_EQUALS(input.GetColumn(), 120);
+
+	IDictionary<int, string>* map = new HashMap<int, string>(
+		[](int key, int tableSize)->int
+		{
+			return key % tableSize;
+		}
+	);
+
+	map->Add(1, string("aaaa"));
+	map->Add(2, string("bbb"));
+	map->Add(3, string("aaa"));
+	map->Add(65, string("ccc"));
+	map->Add(68, string("ddd"));
+	map->Add(2, string("bbbbbb"));
+
+	//std::cout << *dynamic_cast<HashMap<int, string>*>(map);
+}
+
 int main() {
-
-
-	HashMap<int, string> map1 = HashMap<int, string>([](int s, int a)->int {return
-	s % a
-	;}, 4);
-
-	map1.Add(1, string("aaaa"));
-	map1.Add(2, string("bbb"));
-	map1.Add(3, string("aaa"));
-	map1.Add(65, string("ccc"));
-	map1.Add(68, string("ddd"));
-	map1.Add(2, string("bbbbbb"));
-
-	map1.Remove(65);
 	
 	TestEnvironment env{};
 
@@ -317,9 +372,10 @@ int main() {
 	ADD_NEW_TEST(env, "Matrix addition test", MatrixAdditionTest);
 	ADD_NEW_TEST(env, "Matrix on scalar multiplication test", MatrixOnScalarMultiplicationTest);
 	ADD_NEW_TEST(env, "Matrix multiplication test", MatrixMultiplicationTest);
+	ADD_NEW_TEST(env, "Matrix power test", MatrixPowerTest);
+	ADD_NEW_TEST(env, "File reading/writing test", FileTest);
 
 	env.RunAll();
-	
 
 	return 0;
 }

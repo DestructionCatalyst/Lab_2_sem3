@@ -37,7 +37,11 @@ namespace matrix {
 				throw MatrixSizeException("Matrix dimensions can't be zero or negative!");
 			values = new HashMap<Coordinates, T>(coordinatesHash);
 		}
-		//arr must be an two-dimensional array with size rows*columns
+		//Creates a square matrix
+		SparseMatrix(int dimension) :
+			SparseMatrix(dimension, dimension)
+		{}
+		//arr must be an array with size rows*columns, given row-by-row
 		SparseMatrix(T* arr, int rows, int columns) :
 			SparseMatrix(rows, columns)
 		{
@@ -46,6 +50,7 @@ namespace matrix {
 					if (arr[i * columns + j] != 0)
 						values->Add(Coordinates(i, j), arr[i * columns + j]);
 		}
+		
 		SparseMatrix(const SparseMatrix<T>& m) :
 			SparseMatrix(m.rows, m.columns)
 		{
@@ -73,6 +78,18 @@ namespace matrix {
 		{
 			return Get(Coordinates(row, column));
 		}
+		
+		
+		int GetRows() const
+		{
+			return rows;
+		}
+		int GetColumns() const
+		{
+			return columns;
+		}
+
+
 		void Set(Coordinates coord, T item)
 		{
 			if (coord.GetRow() < rows && coord.GetColumn() < columns)
@@ -81,21 +98,13 @@ namespace matrix {
 					values->Remove(coord);
 				else
 					values->Add(coord, item);
-			}	
+			}
 			else
 				throw MatrixSizeException("Coordinates are out of the matrix!");
 		}
 		void Set(int row, int column, T item)
 		{
 			Set(Coordinates(row, column), item);
-		}
-		int GetRows() const
-		{
-			return rows;
-		}
-		int GetColumns() const
-		{
-			return columns;
 		}
 	public:
 		//Order is pretty much random
@@ -140,8 +149,6 @@ namespace matrix {
 				betweenRows(i);
 			}
 		}
-	
-		
 
 	public:
 		iterator Iterator() const
@@ -169,7 +176,9 @@ namespace matrix {
 		friend SparseMatrix<T1>& operator*(const T1 scalar, const SparseMatrix<T1>& m);
 
 		template<class T1>
-		friend SparseMatrix <T1>& operator*(const SparseMatrix<T1> & m1, const SparseMatrix<T1> & m2);
+		friend SparseMatrix<T1>& operator*(const SparseMatrix<T1> & m1, const SparseMatrix<T1> & m2);
+
+
 	};
 
 	
@@ -317,7 +326,7 @@ namespace matrix {
 	SparseMatrix<T1>& operator*(const SparseMatrix<T1>& m1, const SparseMatrix<T1>& m2)
 	{
 		if (m1.GetColumns() != m2.GetRows())
-			throw MatrixSizeException("Row count doesn't match, addition is impossible");
+			throw MatrixSizeException("Row and column count doesn't match, multiplication is impossible");
 
 		SparseMatrix<T1>* res = new SparseMatrix<T1>(m1.GetRows(), m2.GetColumns());
 
@@ -334,5 +343,17 @@ namespace matrix {
 
 		return *res;
 	
+	}
+
+	template<class T1>
+	SparseMatrix<T1>& operator-(const SparseMatrix<T1>& m)
+	{
+		return (-1) * m;
+	}
+
+	template<class T1>
+	SparseMatrix<T1>& operator-(const SparseMatrix<T1>& m1, SparseMatrix<T1> m2)
+	{
+		return m1 + (-1) * m2;
 	}
 }

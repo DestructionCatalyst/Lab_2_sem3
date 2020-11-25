@@ -2,6 +2,7 @@
 
 #include "IDictionary.h"
 #include "HashMapIterator.h"
+#include "ParseFunctions.h"
 
 #include "dependencies/DynamicArray.h"
 #include "dependencies/LinkedList.h"
@@ -43,6 +44,26 @@ namespace dictionary
 				table->Set(new LinkedList<KeyValuePair>, i);
 		}
 	public:
+		virtual void Add(KeyValuePair pair) override
+		{
+			int hash = Hash(pair.first);
+
+			LinkedList<KeyValuePair>* target = table->Get(hash);
+
+			SameHashIterator iter = FindExactItem(pair.first);
+
+			if (iter == target->end())
+			{
+				target->Append(pair);
+				itemsCount++;
+			}
+			else
+			{
+				iter.SetContent(pair);
+			}
+
+			Grow();
+		}
 		virtual void Add(K key, V value) override
 		{
 			int hash = Hash(key);
@@ -185,6 +206,12 @@ namespace dictionary
 			return HashMapIterator<K, V>();
 		}
 	public:
+		template<class K1, class V1>
+		friend std::ostream& operator<<(std::ostream& out, HashMap<K1, V1>& map);
+		//Map must have the right type and be initialized with the right hash function
+		template<class K1, class V1>
+		friend std::istream& operator>>(std::istream& in, HashMap<K1, V1>& map);
+	public:
 		~HashMap()
 		{
 			for (int i = 0; i < GetCapacity(); i++)
@@ -194,6 +221,42 @@ namespace dictionary
 		}
 	};
 	
+	template<class K1, class V1>
+	std::ostream& operator<<(std::ostream& out, HashMap<K1, V1>& hashMap)
+	{
+		out << "{ ";
+
+		HashMapIterator<K1, V1> iter = hashMap.Iterator();
+
+		for (; iter != hashMap.End(); ++iter)
+		{
+			out << "(" << (*iter).first << ";" << (*iter).second << ") ";
+		}
+
+		out << "}" << std::endl;
+
+		return out;
+	}
+
+	template<class K1, class V1>
+	std::istream& operator>>(std::istream& in, HashMap<K1, V1>& map)
+	{
+		string tmp;
+
+		in >> tmp;
+
+		EnsureFirst(tmp, '{');
+
+		std::pair<K1, V1> tmpPair;
+
+		while (tmp != "}")
+		{
+			//parse pair
+		}
+
+		return in;
+	}
+
 	
 }
 

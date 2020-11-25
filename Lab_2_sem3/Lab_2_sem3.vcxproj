@@ -151,6 +151,7 @@
     <ClCompile Include="dependencies\Timer.cpp" />
     <ClCompile Include="dependencies\UnitTest.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ParseFunctions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\ArrayIterator.h" />
@@ -181,8 +182,11 @@
     <ClInclude Include="dependencies\UnitTest.h" />
     <ClInclude Include="HashMap.h" />
     <ClInclude Include="HashMapIterator.h" />
+    <ClInclude Include="PairInOut.h" />
     <ClInclude Include="IDictionary.h" />
     <ClInclude Include="Coordinates.h" />
+    <ClInclude Include="MatrixFunctions.h" />
+    <ClInclude Include="ParseFunctions.h" />
     <ClInclude Include="SparseMatrix.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
