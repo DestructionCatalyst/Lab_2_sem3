@@ -12,6 +12,7 @@
 #include "Coordinates.h"
 #include "SparseMatrix.h"
 #include "MatrixFunctions.h"
+#include "MatrixPolynom.h"
 
 #include <fstream>
 
@@ -407,6 +408,30 @@ void FileTest()
 	*/
 }
 
+void PolynomTest()
+{
+	int a[] =
+	{
+		1, 0, 0, 0, 0,
+		3, 1, 0, 0, 9,
+		0, 0, 0, 0, 0,
+		0, 0, 4, 0, 0,
+		0, 0, 5, 0, 0
+	};
+
+	SparseMatrix<int>* matrix = new SparseMatrix<int>(a, 5, 5);
+
+	ArraySequence<int>* seq = new ArraySequence<int>({ 1, 1, 0, 0, 0, 1, 0, 0, 0, 1 });
+
+	MatrixPolynom<int>* polynom = new MatrixPolynom<int>(matrix, seq);
+
+	polynom->curNeeded = 3;
+	
+	polynom->UpdatePaths();
+
+	std::cout << *polynom->costs << std::endl;
+}
+
 int main() {
 	
 	TestEnvironment env{};
@@ -421,6 +446,7 @@ int main() {
 	ADD_NEW_TEST(env, "Matrix multiplication test", MatrixMultiplicationTest);
 	ADD_NEW_TEST(env, "Matrix power test", MatrixPowerTest);
 	ADD_NEW_TEST(env, "File reading/writing test", FileTest);
+	ADD_NEW_TEST(env, "Matrix polynom test", PolynomTest);
 
 	env.RunAll();
 

@@ -182,6 +182,7 @@
     <ClInclude Include="dependencies\UnitTest.h" />
     <ClInclude Include="HashMap.h" />
     <ClInclude Include="HashMapIterator.h" />
+    <ClInclude Include="MatrixPolynom.h" />
     <ClInclude Include="PairInOut.h" />
     <ClInclude Include="IDictionary.h" />
     <ClInclude Include="Coordinates.h" />

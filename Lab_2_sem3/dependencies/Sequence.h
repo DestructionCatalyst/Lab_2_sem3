@@ -43,7 +43,7 @@ namespace sequences {
 
 		virtual void Swap(int item1, int item2) = 0;
 
-		virtual void Print() const = 0;
+		//virtual void Print() const = 0;
 
 		virtual ~Sequence() {};
 	};

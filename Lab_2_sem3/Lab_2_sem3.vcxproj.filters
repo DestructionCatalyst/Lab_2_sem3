@@ -194,5 +194,8 @@
     <ClInclude Include="PairInOut.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="MatrixPolynom.h">
+      <Filter>Matrix</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

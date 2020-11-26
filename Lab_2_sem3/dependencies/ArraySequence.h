@@ -9,6 +9,7 @@
 #include "MutableArrayIterator.h"
 #include "ItemGenerator.h"
 #include "ParseFunctions.h"
+#include "PairInOut.h"
 
 #define DEFAULT_SIZE 8
 #define min(num1, num2) ((num1<num2)?num1:num2)
@@ -208,6 +209,7 @@ namespace sequences {
 		}
 		*/
 	public:
+		/*
 		void Print() const override
 		{
 			const_iterator iter = dcast(begin());
@@ -216,7 +218,7 @@ namespace sequences {
 				std::cout << *iter << " ";
 			}
 			std::cout << std::endl;
-		}
+		}*/
 	private:
 		const_iterator dcast(Sequence<T>::const_iterator* iter) const
 		{
