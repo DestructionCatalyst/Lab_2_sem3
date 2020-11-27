@@ -55,7 +55,7 @@ namespace matrix {
 					if (arr[i * columns + j] != 0)
 						values->Add(Coordinates(i, j), arr[i * columns + j]);
 		}
-		
+		//Copy constructor
 		SparseMatrix(const SparseMatrix<T>& m) :
 			SparseMatrix(m.rows, m.columns)
 		{
@@ -66,7 +66,14 @@ namespace matrix {
 				}
 			);
 		}
+		//Move constructor
+		SparseMatrix(SparseMatrix<T>&& m)
+		{
+			rows = m.rows;
+			columns = m.columns;
 
+			values = m.values;
+		}
 	public:
 		T Get(Coordinates coord) const
 		{
@@ -193,6 +200,33 @@ namespace matrix {
 
 		template<class T1>
 		friend std::istream& operator>> (std::istream& stream, SparseMatrix<T1>& matrix);
+
+		SparseMatrix<T>& operator=(const SparseMatrix<T>& matrix)
+		{
+			values = new HashMap<Coordinates, T>(coordinatesHash);
+
+			rows = matrix.rows;
+			columns = matrix.columns;
+
+			matrix.ForEach(
+				[&](Coordinates coord, T item)->void
+				{
+					values->Add(coord, item);
+				}
+			);
+
+			return *this;
+		}
+	
+		SparseMatrix<T>& operator=(SparseMatrix<T>&& matrix)
+		{
+			rows = matrix.rows;
+			columns = matrix.columns;
+
+			values = matrix.values;
+
+			return *this;
+		}
 	};
 
 	template<class T>
@@ -410,5 +444,7 @@ namespace matrix {
 		}
 		return stream;
 	}
+
+	
 }
 

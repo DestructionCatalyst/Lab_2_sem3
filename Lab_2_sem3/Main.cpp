@@ -421,15 +421,15 @@ void PolynomTest()
 
 	SparseMatrix<int>* matrix = new SparseMatrix<int>(a, 5, 5);
 
-	ArraySequence<int>* seq = new ArraySequence<int>({ 1, 1, 0, 0, 0, 1, 0, 0, 0, 1 });
+	ArraySequence<int>* seq = new ArraySequence<int>({ 1, 1, 0, 0, 0, -2, 0, 0, 0, 1 });
 
 	MatrixPolynom<int>* polynom = new MatrixPolynom<int>(matrix, seq);
 
-	polynom->curNeeded = 3;
+	//polynom->curNeeded = 3;
 	
-	polynom->UpdatePaths();
+	//polynom->UpdatePaths();
 
-	std::cout << *polynom->costs << std::endl;
+	std::cout << *polynom->Calculate() << std::endl;
 }
 
 int main() {

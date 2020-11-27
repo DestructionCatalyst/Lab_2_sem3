@@ -8,8 +8,6 @@
 #include "SequenceIterator.h"
 #include "ItemGenerator.h"
 
-#define min(num1, num2) ((num1<num2)?num1:num2)
-
 namespace sequences {
 	template <class T> class ListSequence : public Sequence<T> {
 	public:

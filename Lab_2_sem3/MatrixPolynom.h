@@ -7,10 +7,21 @@
 #include "SparseMatrix.h"
 #include "MatrixFunctions.h"
 
+
+
 using namespace sequences;
 using std::pair;
 
 namespace matrix {
+
+	class ZeroMatrixException : public std::exception
+	{
+	public:
+		ZeroMatrixException():
+			std::exception()
+		{}
+	};
+
 	template<class T>
 	class MatrixPolynom 
 	{
@@ -71,8 +82,24 @@ namespace matrix {
 					needed->Append(i);
 			}
 
-			curNeeded = 0;
+			curNeeded = 2;
 			recountStart = 2;
+		}
+		SparseMatrix<T>* Calculate()
+		{
+			CalculatePowers();
+
+			SparseMatrix<T>* res = new SparseMatrix<T>(*zeros);
+			SparseMatrix<T>* term = new SparseMatrix<T>(1, 1);
+
+			for (int i = 0; i < needed->GetLength(); i++)
+			{
+				*term = coef->Get(needed->Get(i)) * (*matrixPowers->Get(needed->Get(i)));
+
+				*res = (*res) + (*term);
+			}
+
+			return res;
 		}
 	public:
 		int CountCost(int leftParent, int rightParent)
@@ -82,9 +109,10 @@ namespace matrix {
 			else
 				return costs->Get(leftParent) + costs->Get(rightParent) + 1;
 		}
+		//Finds ways with minimal costs in the interval [recountStart, needed.Get(curNeeded)]
 		void UpdatePaths()
 		{
-			int finish = needed->Get(curNeeded);
+			int finish = GetNeeded();
 
 			for (int i = recountStart; i <= finish; i++)
 			{
@@ -93,6 +121,72 @@ namespace matrix {
 					Recount(i);
 				}
 			}
+
+			recountStart = finish + 1;
+
+			std::cout << *costs << std::endl;
+		}
+		//Get a matrix power, calculating everything with the current parents 
+		SparseMatrix<T>* GetPower(int index)
+		{
+			if (costs->Get(index) == 0)
+			{ }
+			else if (costs->Get(index) == 1)
+			{
+				Multiply(parents->Get(index).first, parents->Get(index).second);
+			}
+			else
+			{
+				GetPower(parents->Get(index).first);
+				GetPower(parents->Get(index).second);
+				Multiply(parents->Get(index).first, parents->Get(index).second);
+			}
+
+			return matrixPowers->Get(index);
+
+		}
+		//Call only if the costs under the indexes are zero
+		void Multiply(int leftIndex, int rightIndex)
+		{
+			int index = leftIndex + rightIndex;
+
+			SparseMatrix<T>* product = new SparseMatrix<T>(
+				(*matrixPowers->Get(leftIndex)) * (*matrixPowers->Get(rightIndex))
+				);
+
+			matrixPowers->Set(product, index);
+
+			if ((*product) == (*zeros))
+				throw ZeroMatrixException();
+
+			costs->Set(0, index);
+
+			recountStart = std::min(recountStart, index);
+		}
+		void CalculatePowers()
+		{
+			bool gotZero = false;
+
+			for (; curNeeded < needed->GetLength(); curNeeded++)//2
+			{
+				if (!gotZero)
+				{
+					UpdatePaths();
+					try {
+						GetPower(GetNeeded());
+					}
+					catch (ZeroMatrixException e)
+					{
+						gotZero = true;
+					}
+				}
+				else
+					matrixPowers->Set(zeros, curNeeded);
+			}
+		}
+		int GetNeeded()
+		{
+			return needed->Get(curNeeded);
 		}
 	private:
 		void Recount(int index)

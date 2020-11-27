@@ -12,8 +12,6 @@
 #include "PairInOut.h"
 
 #define DEFAULT_SIZE 8
-#define min(num1, num2) ((num1<num2)?num1:num2)
-
 
 namespace sequences {
 	template <class T> class ArraySequence : public Sequence<T> {
