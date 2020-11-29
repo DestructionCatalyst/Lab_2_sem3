@@ -43,6 +43,19 @@ namespace dictionary {
 		{
 			return !(*this == o);
 		}
+		bool HasNext() const
+		{
+			return (currentItem != nullptr) && 
+				!((currentHash == tableSize - 1) && (*currentItem == table->Get(currentHash)->GetLast()));
+		}
+		bool TryGet(KeyValuePair& item)
+		{
+			if (currentItem = nullptr)
+				return false;
+			else
+				item = **this;
+			return true;
+		}
 	private:
 		SameHashIterator NextItem()
 		{

@@ -79,7 +79,7 @@ namespace matrix {
 		{
 			try
 			{
-				return values->Find(coord);
+				return values->Get(coord);
 			}
 			catch (key_not_found)
 			{

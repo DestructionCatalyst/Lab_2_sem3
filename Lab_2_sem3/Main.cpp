@@ -52,7 +52,7 @@ void header()
 		<< "6 - save to file" << endl
 		<< "7 - load from file" << endl
 		<< "8 - launch tests" << endl
-		<< "0 - exit" << endl << endl;
+		<< "9 - exit" << endl << endl;
 }
 
 int main() {
@@ -70,7 +70,7 @@ int main() {
 	TestEnvironment env{};
 	initTests(env);
 
-	while (command != 0)
+	while (command != 9)
 	{
 		header();
 
@@ -115,7 +115,7 @@ int main() {
 		case 3:
 			try
 			{
-				cout << "Insert polynom coeffitients: " << endl;
+				cout << "Insert polynom coeffitients ([ is start and ] is end): " << endl;
 
 				delete(coef);
 
@@ -137,7 +137,7 @@ int main() {
 
 			break;
 		case 5:
-			if ((coef == nullptr) || (matrix == nullptr))
+			if ((coef == nullptr) || (matrix == nullptr) || (coef->GetLength() == 0))
 				std::cout << "Not initialized!" << endl;
 			else
 			{
@@ -171,9 +171,11 @@ int main() {
 			env.RunAll();
 
 			break;
-		case 0:
+		case 9:
 			break;
 		default:
+			cin.clear();
+			cin.ignore(32767, '\n');
 			cout << "Incorrect input!" << endl;
 		}
 

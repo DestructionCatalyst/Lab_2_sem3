@@ -47,10 +47,10 @@ void simpleMapTest()
 
 	map->Remove(65);
 
-	ASSERT_EQUALS(map->Find(1), string("aaaa"));
-	ASSERT_EQUALS(map->Find(2), string("bbbbbb"));
-	ASSERT_EQUALS(map->Find(3), string("aaa"));
-	ASSERT_EQUALS(map->Find(68), string("ddd"));
+	ASSERT_EQUALS(map->Get(1), string("aaaa"));
+	ASSERT_EQUALS(map->Get(2), string("bbbbbb"));
+	ASSERT_EQUALS(map->Get(3), string("aaa"));
+	ASSERT_EQUALS(map->Get(68), string("ddd"));
 
 	//HashMap<int, string>::iterator iter = dynamic_cast<HashMap<int, string>*>(map)->Iterator();
 
@@ -64,13 +64,13 @@ void simpleMapTest()
 		}
 	);
 
-	ASSERT_EQUALS(map1->Find(1), string("aaaa1"));
-	ASSERT_EQUALS(map1->Find(2), string("bbbbbb1"));
-	ASSERT_EQUALS(map1->Find(3), string("aaa1"));
-	ASSERT_EQUALS(map1->Find(68), string("ddd1"));
+	ASSERT_EQUALS(map1->Get(1), string("aaaa1"));
+	ASSERT_EQUALS(map1->Get(2), string("bbbbbb1"));
+	ASSERT_EQUALS(map1->Get(3), string("aaa1"));
+	ASSERT_EQUALS(map1->Get(68), string("ddd1"));
 
-	ASSERT_THROWS(map->Find(65), key_not_found);
-	ASSERT_THROWS(map->Find(66), key_not_found);
+	ASSERT_THROWS(map->Get(65), key_not_found);
+	ASSERT_THROWS(map->Get(66), key_not_found);
 
 	delete(map);
 
@@ -95,13 +95,13 @@ void resizeTest()
 
 	map->Remove(65);
 
-	ASSERT_EQUALS(map->Find(1), string("aaaa"));
-	ASSERT_EQUALS(map->Find(2), string("bbbbbb"));
-	ASSERT_EQUALS(map->Find(3), string("aaa"));
-	ASSERT_EQUALS(map->Find(68), string("ddd"));
+	ASSERT_EQUALS(map->Get(1), string("aaaa"));
+	ASSERT_EQUALS(map->Get(2), string("bbbbbb"));
+	ASSERT_EQUALS(map->Get(3), string("aaa"));
+	ASSERT_EQUALS(map->Get(68), string("ddd"));
 
-	ASSERT_THROWS(map->Find(65), key_not_found);
-	ASSERT_THROWS(map->Find(66), key_not_found);
+	ASSERT_THROWS(map->Get(65), key_not_found);
+	ASSERT_THROWS(map->Get(66), key_not_found);
 
 	delete(map);
 }

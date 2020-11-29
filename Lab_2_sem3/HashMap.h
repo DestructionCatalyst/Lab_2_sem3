@@ -92,7 +92,7 @@ namespace dictionary
 
 			Shrink();
 		}
-		virtual V Find(K key) const override
+		virtual V Get(K key) const override
 		{
 			SameHashIterator item = FindExactItem(key);
 			
@@ -100,6 +100,15 @@ namespace dictionary
 				return (*item).second;
 			else
 				throw key_not_found("Key is not in dictionary!");
+		}
+		virtual bool Contains(K key) override
+		{
+			SameHashIterator item = FindExactItem(key);
+
+			if (item != SameHashIterator(nullptr))
+				return true;
+			else
+				return false;
 		}
 	public:
 		int GetCapacity() const
