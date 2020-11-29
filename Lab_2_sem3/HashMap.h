@@ -101,7 +101,7 @@ namespace dictionary
 			else
 				throw key_not_found("Key is not in dictionary!");
 		}
-		virtual bool Contains(K key) override
+		virtual bool Contains(K key)  const override
 		{
 			SameHashIterator item = FindExactItem(key);
 
@@ -111,9 +111,13 @@ namespace dictionary
 				return false;
 		}
 	public:
-		int GetCapacity() const
+		virtual int GetCapacity() const override
 		{
 			return table->GetCapacity();
+		}
+		virtual int Count() const override
+		{
+			return itemsCount;
 		}
 	public:
 		IDictionary<K, V>* Map(std::function<V(V)> f) const
