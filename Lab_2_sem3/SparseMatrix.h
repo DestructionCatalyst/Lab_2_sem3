@@ -242,7 +242,7 @@ namespace matrix {
 	}
 
 	template<class T>
-	int GetMaxLength(SparseMatrix<T> m) 
+	int GetMaxLength(const SparseMatrix<T>& m) 
 	{
 		T maxLenItem = m.Reduce(
 			[&](T a, T b)->T

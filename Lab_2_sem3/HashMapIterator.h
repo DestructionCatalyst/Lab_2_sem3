@@ -60,6 +60,9 @@ namespace dictionary {
 		}
 		SameHashIterator NextHash()
 		{
+			if (currentHash >= tableSize)
+				return nullptr;
+
 			LinkedList<KeyValuePair>* target = table->Get(currentHash);
 
 			while (target->begin() == target->end())

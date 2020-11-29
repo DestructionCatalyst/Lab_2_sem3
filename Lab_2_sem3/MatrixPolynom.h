@@ -76,7 +76,10 @@ namespace matrix {
 
 			needed = new ArraySequence<T>();
 
-			for (int i = 0; i < coef->GetLength(); i++)
+			needed->Append(0);
+			needed->Append(1);
+
+			for (int i = 2; i < coef->GetLength(); i++)
 			{
 				if (coef->Get(i) != 0)
 					needed->Append(i);
@@ -94,6 +97,8 @@ namespace matrix {
 
 			for (int i = 0; i < needed->GetLength(); i++)
 			{
+				//std::cout << *matrixPowers;
+
 				*term = coef->Get(needed->Get(i)) * (*matrixPowers->Get(needed->Get(i)));
 
 				*res = (*res) + (*term);
@@ -124,7 +129,7 @@ namespace matrix {
 
 			recountStart = finish + 1;
 
-			std::cout << *costs << std::endl;
+			//std::cout << *costs << std::endl;
 		}
 		//Get a matrix power, calculating everything with the current parents 
 		SparseMatrix<T>* GetPower(int index)

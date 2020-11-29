@@ -90,6 +90,9 @@
     <ClCompile Include="ParseFunctions.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Tests.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dependencies\ArrayIterator.h">
@@ -196,6 +199,12 @@
     </ClInclude>
     <ClInclude Include="MatrixPolynom.h">
       <Filter>Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="FileMacros.h">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
